@@ -14,4 +14,4 @@ Honestly I'm just trying to combine two things together if it sucks please do no
 I also optimized some other code to make it go direct to the /dev/servoblaster instead of running a stupid external command.
 I don't know how the RGB values are to be sent just yet.
 
-This isn't tested yet. I'm waiting for hardware to arrive so I can test this. I'm also going to write (I mean fork and modify) some other stuff to get an LCD status output as well as IR input via a 44-key controller remote that I have with a standard LCD controller.
+This isn't tested yet. I'm waiting for hardware to arrive so I can test this. I'm also going to write (I mean fork and modify) some other stuff to get an LCD status output as well as IR input via a 44-key controller remote that I have with a standard LED RGB strip controller.
