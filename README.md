@@ -1,3 +1,6 @@
+simple_RGB_driver
+=================
+
 This will allow you to use a(n) RGB LED(s) straight from your raspberry pi WITHOUT a servo driver!<br />
 Forked from [smithje/RGB_LED_Driver](https://github.com/smithje/RGB_LED_Driver) on github. 90% of the code is completely untouched so usage is similar.
 Requires 3 TIP120 (1 per color channel) and appropriate power source for LED strips or 12V LEDs.
