@@ -3,17 +3,15 @@ See README.md
 """
 
 import time
+import RGB_Driver
 """import os"""
  
-class RGB_Driver(object):
+"""class RGB_Driver(object):
  
-	def pwm(pin, angle):
+    def pwm(pin, angle):
 		print "servo[" + str(pin) + "][" + str(angle) + "]"
 		with open('/dev/servoblaster','w') as s:
 			f.write(str(pin) + "=" + str(angle))
-		
-	def pwm(param):
-		print str(param)
 	
 	def __init__(self, pwm = None, red_pin = 0, green_pin = 1, blue_pin = 2):
 		if pwm is None:
@@ -26,7 +24,7 @@ class RGB_Driver(object):
 
 	@staticmethod
 	def convert_eight_to_twelve_bit(eight_bit):
-		"""The PWM chip has 10 bit resolution, so we need to
+		""""""The PWM chip has 10 bit resolution, so we need to
 		convert regular 8 bit rgb codes
 		>>> RGB_Driver.convert_eight_to_ten_bit(0)
 		0
@@ -34,11 +32,11 @@ class RGB_Driver(object):
 		4080
 		>>> RGB_Driver.convert_eight_to_ten_bit(128)
 		2048
-		"""
+		""""""
 		return eight_bit<<4
 
 	def set_rgb(self, red_value, green_value, blue_value):
-		"""The rgb values must be between 0 and 4095"""
+		""""""The rgb values must be between 0 and 4095""""""
 		#print "R: %d, G: %d, B: %d" % (red_value, green_value, blue_value)
 		pwm(self.red_pin, red_value)
 		pwm(self.green_pin, green_value)
@@ -55,15 +53,15 @@ class RGB_Driver(object):
   
 	@staticmethod
 	def randrange(start, stop, step=1):
-		"""A slightly modified version of randrange which allows start==stop"""
+		""""""A slightly modified version of randrange which allows start==stop""""""
 		if start == stop:
 			return start
 		else:
 			return randrange(start, stop, step) 
 
 	def fade_rgb(self, from_red, from_green, from_blue, to_red, to_green, to_blue, steps, delay):
-		"""Fade from one rgb value to another in steps, waiting for delay ms between each step
-		all rgb values must be 10 bit ints (between 0 and 1023)"""
+		""""""Fade from one rgb value to another in steps, waiting for delay ms between each step
+		all rgb values must be 10 bit ints (between 0 and 1023)""""""
 		red_step = float(to_red - from_red)/steps
 		green_step = float(to_green - from_green)/steps
 		blue_step = float(to_blue - from_blue)/steps
@@ -76,8 +74,8 @@ class RGB_Driver(object):
 
 	@staticmethod
 	def get_next_random_value(current_value, minimum_allowed, maximum_allowed, max_walk):
-		"""Generate the next random value, given the current, max, and min values of that channel
-		as well as the maximum change (walk) allowed"""
+		""""""Generate the next random value, given the current, max, and min values of that channel
+		as well as the maximum change (walk) allowed""""""
 		min = current_value - max_walk
 		if min<minimum_allowed:
 			min = minimum_allowed
@@ -108,7 +106,7 @@ class RGB_Driver(object):
 		time.sleep(delay)
 
 
-
+"""
 if __name__ == '__main__':
 	import argparse
 	parser = argparse.ArgumentParser(description='drive a rgb led strip through a pwm module')
