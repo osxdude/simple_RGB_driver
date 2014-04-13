@@ -10,6 +10,9 @@ import argparse
 
    
 GPIO.setmode(GPIO.BOARD)
+red_pin = 7
+green_pin = 11
+blue_pin = 12
 red = red_pin #pin numbers to match LED legs
 green = green_pin
 blue = blue_pin
