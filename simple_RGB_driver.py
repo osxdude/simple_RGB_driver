@@ -10,18 +10,19 @@ class RGB_Driver(object):
 	def pwm(pin, angle):
 		print "servo[" + str(pin) + "][" + str(angle) + "]"
 		with open('/dev/servoblaster','w') as s:
-		f.write(str(pin) + "=" + str(angle))
-		"""cmd = "echo " + str(pin) + "=" + str(angle) + " > /dev/servoblaster"""
-		"""os.system(cmd)"""
-
+			f.write(str(pin) + "=" + str(angle))
+		
+	def pwm(param):
+		print str(param)
+	
 	def __init__(self, pwm = None, red_pin = 0, green_pin = 1, blue_pin = 2):
+		if pwm is None:
+			self.pwm = self.pwm()
+		else:
+			print "Fuck yourself"
 		self.red_pin = red_pin
 		self.green_pin = green_pin
 		self.blue_pin = blue_pin
-		if pwm is None:
-			self.pwm = self.setup_pwm()
-		else:
-			self.pwm = pwm
 
 	@staticmethod
 	def convert_eight_to_twelve_bit(eight_bit):
@@ -34,7 +35,7 @@ class RGB_Driver(object):
 		>>> RGB_Driver.convert_eight_to_ten_bit(128)
 		2048
 		"""
-	return eight_bit<<4
+		return eight_bit<<4
 
 	def set_rgb(self, red_value, green_value, blue_value):
 		"""The rgb values must be between 0 and 4095"""
@@ -44,7 +45,7 @@ class RGB_Driver(object):
 		pwm(self.blue_pin, blue_value)
 
 	@staticmethod
-		def sanitize_int(x):
+	def sanitize_int(x):
 		if x<0:
 			return 0
 		elif x>4095:
@@ -89,7 +90,7 @@ class RGB_Driver(object):
 		elif max>4095:
 			max=4095
 
-	return RGB_Driver.randrange(min, max)
+		return RGB_Driver.randrange(min, max)
 
 
 	def random_walk(self, min_red, min_green, min_blue, max_red, max_green, max_blue, random_time, delay, max_walk):
@@ -112,9 +113,13 @@ if __name__ == '__main__':
 	import argparse
 	parser = argparse.ArgumentParser(description='drive a rgb led strip through a pwm module')
 
-	parser.add_argument('-r', '--red', nargs=2, type=int, default=[0, 0], help="The beginning and end values for red in fade mode.  Max and min values for red in random mode.")
-	parser.add_argument('-g', '--green', nargs=2, type=int, default=[0, 0], help="The beginning and end values for green in fade mode.  Max and min values for green in random mode..")
-	parser.add_argument('-b', '--blue', nargs=2, type=int, default=[0, 0], help="The beginning and end values for blue in fade mode.  Max and min values for blue in random mode..")
+	parser.add_argument('-rf', '--red-fade', nargs=2, type=int, default=[0, 0], help="The beginning and end values for red in fade mode.  Max and min values for red in random mode.")
+	parser.add_argument('-gf', '--green-fade', nargs=2, type=int, default=[0, 0], help="The beginning and end values for green in fade mode.  Max and min values for green in random mode..")
+	parser.add_argument('-bf', '--blue-fade', nargs=2, type=int, default=[0, 0], help="The beginning and end values for blue in fade mode.  Max and min values for blue in random mode..")
+	parser.add_argument('-r', '--red', nargs=1, type=int, default=[0], help="The beginning and end values for red in static mode.")
+	parser.add_argument('-g', '--green', nargs=1, type=int, default=[0], help="The beginning and end values for green in static mode.")
+	parser.add_argument('-b', '--blue', nargs=1, type=int, default=[0], help="The beginning and end values for blue in static mode.")
+	parser.add_argument('-c', '--static', action="store_true", help="Specify when using the static RGB value arguments.")
 	parser.add_argument('-s', '--steps', type=int, default=100, help="Number of steps in the fade.  Not used with --random")
 	parser.add_argument('-d', '--delay', type=float, default=0.005, help="Number of seconds between the steps or random changes, can be a float")
 	parser.add_argument('-o', '--turn-off', action='store_true', help="Turn off when the fade or random event is over.")
@@ -136,15 +141,17 @@ if __name__ == '__main__':
 		if args.random is False:
 			for repeat in xrange(0, args.repeat):
 				print "Repetition %d" % repeat
-				driver.fade_rgb(args.red[0], args.green[0], args.blue[0], args.red[1], args.green[1], args.blue[1], args.steps, args.delay)
+				driver.fade_rgb(args.red_fade[0], args.green_fade[0], args.blue_fade[0], args.red_fade[1], args.green_fade[1], args.blue_fade[1], args.steps, args.delay)
 		if args.reverse:
-			driver.fade_rgb(args.red[1], args.green[1], args.blue[1], args.red[0], args.green[0], args.blue[0], args.steps, args.delay)
+			driver.fade_rgb(args.red_fade[0], args.green_fade[0], args.blue_fade[0], args.red_fade[1], args.green_fade[1], args.blue_fade[1], args.steps, args.delay)
+		if args.static:
+			driver.set_rgb(args.red[0], args.green[0], args.blue[0])
 		else:
 		# We need to sort the values to make sure randrange works correctly
 			args.red.sort()
 			args.green.sort()
 			args.blue.sort()
-			driver.random_walk(args.red[0], args.green[0], args.blue[0], args.red[1], args.green[1], args.blue[1], args.time, args.delay, args.max_random_walk)
-		finally:
-			if args.turn_off:
-				driver.set_rgb(0, 0, 0)
+			driver.random_walk(args.red_fade[0], args.green_fade[0], args.blue_fade[0], args.red_fade[1], args.green_fade[1], args.time, args.delay, args.max_random_walk)
+	finally:
+		if args.turn_off:
+			driver.set_rgb(0, 0, 0)
